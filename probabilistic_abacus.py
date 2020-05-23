@@ -1,3 +1,23 @@
+def get_absorption_probabilities(transition_matrix):
+    critical_chips = []
+    for transition_row in transition_matrix:
+        critical_chips.append(sum(transition_row) - 1)
+    transient_states = []
+    terminal_states = []
+    for state in range(len(transition_matrix)):
+        if critical_chips[state] >= 0:
+            transient_states.append(state)
+        elif critical_chips[state] == -1:
+            terminal_states.append(state)
+    chips = get_chips(transition_matrix, critical_chips, transient_states)
+    total_chips = 0
+    for terminal_state in terminal_states:
+        total_chips += chips[terminal_state]
+    absorption_probabilities = []
+    for terminal_state in terminal_states:
+        absorption_probabilities.append(float(chips[terminal_state]) / total_chips)
+    return absorption_probabilities
+
 def get_chips(transition_matrix, critical_chips, transient_states):
     chips = []
     for state in range(len(transition_matrix)):
@@ -25,24 +45,4 @@ def get_chips(transition_matrix, critical_chips, transient_states):
                 return chips
             else:
                 chips[0] += 1
-
-def get_absorption_probabilities(transition_matrix):
-    critical_chips = []
-    for transition_row in transition_matrix:
-        critical_chips.append(sum(transition_row) - 1)
-    transient_states = []
-    terminal_states = []
-    for state in range(len(transition_matrix)):
-        if critical_chips[state] >= 0:
-            transient_states.append(state)
-        elif critical_chips[state] == -1:
-            terminal_states.append(state)
-    chips = get_chips(transition_matrix, critical_chips, transient_states)
-    total_chips = 0
-    for terminal_state in terminal_states:
-        total_chips += chips[terminal_state]
-    absorption_probabilities = []
-    for terminal_state in terminal_states:
-        absorption_probabilities.append(float(chips[terminal_state]) / total_chips)
-    return absorption_probabilities
 
